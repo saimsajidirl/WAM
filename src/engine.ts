@@ -117,6 +117,11 @@ class Engine {
     this.base = opts.startAt ?? 0;
     this.hooks?.loading(true);
 
+    // Attach Web Audio on first local playback — the stream server is
+    // CORS-enabled, so boost/EQ/delay/analyser all work. Remote URLs skip
+    // this: once captured, a non-CORS source would be silenced.
+    if (!item.remote) audioGraph.attach(this.el);
+
     let src = item.src;
     if (!item.native && !item.remote) {
       // needs transcode

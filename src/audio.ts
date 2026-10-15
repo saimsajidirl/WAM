@@ -16,6 +16,8 @@ class AudioGraph {
   analyser: AnalyserNode | null = null;
   private normalization = false;
   private delayMs = 0;
+  private boostFactor = 1;
+  private lastEq: EqState | null = null;
 
   attach(el: HTMLMediaElement) {
     if (this.ctx) return;
@@ -43,6 +45,10 @@ class AudioGraph {
       this.analyser.fftSize = 2048;
       this.analyser.smoothingTimeConstant = 0.82;
       this.rebuild();
+      // re-apply settings that were pushed before the graph existed
+      this.boost.gain.value = this.boostFactor;
+      this.delay.delayTime.value = Math.max(0, this.delayMs / 1000);
+      if (this.lastEq) this.applyEq(this.lastEq);
     } catch {
       this.ctx = null;
     }
@@ -85,7 +91,8 @@ class AudioGraph {
 
   /** boost factor: >1 amplifies beyond 100% (VLC-style, up to 300%). */
   setBoost(factor: number) {
-    if (this.boost) this.boost.gain.value = Math.max(0, factor);
+    this.boostFactor = Math.max(0, factor);
+    if (this.boost) this.boost.gain.value = this.boostFactor;
   }
 
   /** Audio/video sync offset in milliseconds (negative = audio earlier). */
@@ -104,6 +111,7 @@ class AudioGraph {
   }
 
   applyEq(eq: EqState) {
+    this.lastEq = eq;
     if (!this.ctx) return;
     const g = eq.enabled ? eq.preamp : 0;
     this.preamp!.gain.value = Math.pow(10, g / 20);

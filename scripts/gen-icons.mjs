@@ -161,3 +161,15 @@ for (const t of targets) {
 }
 fs.writeFileSync(path.join(OUT, "icon.ico"), toIco(bufs));
 console.log("wrote icon.ico");
+
+// Force cargo to rerun tauri-build (re-embeds the icon into the exe's
+// .rsrc). The build script doesn't watch icon files, so without this a
+// relink would reuse a stale compiled resource.
+const buildRs = path.resolve(OUT, "../build.rs");
+try {
+  const now = new Date();
+  fs.utimesSync(buildRs, now, now);
+  console.log("touched build.rs (forces icon re-embed on next build)");
+} catch {
+  console.warn("could not touch build.rs — rebuild may reuse the old icon");
+}
