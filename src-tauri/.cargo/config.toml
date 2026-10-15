@@ -1,0 +1,13 @@
+# The x86_64-pc-windows-gnu toolchain needs GNU binutils+gcc for build-script
+# import libs (dlltool) and linking. A standalone MinGW-w64 toolchain lives in
+# ~/.wam-tools/mingw64/bin (winlibs build). PATH on Windows is "Path".
+# windres (resource compiler for the exe icon) cannot handle paths containing
+# spaces — "D:\Software Engineering\..." breaks its preprocessor invocation.
+# Keep the target dir space-free.
+[build]
+target-dir = "D:/wam-target"
+
+[env]
+DLLTOOL = { value = "C:/Users/Saim/.wam-tools/mingw64/bin/dlltool.exe", force = true }
+WINDRES = { value = "C:/Users/Saim/.wam-tools/mingw64/bin/windres.exe", force = true }
+Path = { value = "C:/Users/Saim/.wam-tools/mingw64/bin", force = false, relative = false }
