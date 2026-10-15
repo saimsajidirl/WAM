@@ -32,6 +32,25 @@
   align-items: center;
 }
 .tb-name { font-weight: 700; font-size: 0.82rem; letter-spacing: 0.08em; }
+.menubar { display: flex; align-items: center; gap: 1px; margin-left: 12px; }
+.menubar-btn {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--fg-dim);
+  transition: background 0.12s, color 0.12s;
+}
+.menubar-btn:hover, .menubar-btn.open { background: var(--hover); color: var(--fg); }
+.menu.drop {
+  top: calc(100% + 6px);
+  bottom: auto;
+  left: 0;
+  right: auto;
+  animation: menuDropIn 0.14s ease;
+}
+@keyframes menuDropIn { from { opacity: 0; transform: translateY(-6px); } }
+.mi-key { color: var(--fg-faint); font-size: 0.72rem; margin-left: 20px; flex-shrink: 0; }
 .tb-now {
   color: var(--fg-faint);
   font-size: 0.78rem;
@@ -231,17 +250,16 @@
   position: relative;
   flex-shrink: 0;
   padding: 0 14px 10px;
-  background: transparent;
+  background: var(--bg);
   z-index: 40;
   transition: transform 0.28s ease, opacity 0.28s ease;
 }
 .controls::before {
   content: "";
   position: absolute;
-  inset: -60px 0 0 0;
-  background: linear-gradient(to top, var(--bg) 30%, transparent);
+  inset: -48px 0 100% 0;
+  background: linear-gradient(to top, var(--bg), transparent);
   pointer-events: none;
-  z-index: -1;
 }
 .controls.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
 .controls.hide .seek-wrap { pointer-events: none; }

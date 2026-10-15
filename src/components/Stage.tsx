@@ -57,21 +57,23 @@ export function Stage() {
     return activeCue(subCues, time + subDelay / 1000);
   }, [activeSub, subCues, time, subDelay]);
 
-  const onClick = () => {
+  const onClick = (e: React.MouseEvent) => {
     if (suppressClick.current) {
       suppressClick.current = false;
       return;
     }
-    if (clickTimer.current) {
-      clearTimeout(clickTimer.current);
-      clickTimer.current = null;
+    if (e.detail >= 2) {
+      if (clickTimer.current) {
+        clearTimeout(clickTimer.current);
+        clickTimer.current = null;
+      }
       toggleFullscreen();
       return;
     }
     clickTimer.current = setTimeout(() => {
       clickTimer.current = null;
       if (usePlayer.getState().current) usePlayer.getState().toggle();
-    }, 240);
+    }, 300);
   };
 
   const onWheel = (e: React.WheelEvent) => {

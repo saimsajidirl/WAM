@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Minus, Square, X, Pin, PinOff, Copy } from "lucide-react";
 import { LogoMark } from "./Logo";
+import { MenuBar } from "./MenuBar";
 import { usePlayer } from "../store";
 import { isTauri } from "../lib/api";
 
@@ -38,6 +39,7 @@ export function TitleBar() {
       <div className="tb-brand" data-tauri-drag-region>
         <span className="tb-logo"><LogoMark size={15} /></span>
         <span className="tb-name">WAM</span>
+        <MenuBar />
         {current && <span className="tb-now">{current.name}</span>}
       </div>
       <div className="tb-actions">
