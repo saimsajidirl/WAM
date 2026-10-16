@@ -2,9 +2,24 @@ import { useEffect, useRef } from "react";
 import { usePlayer } from "./store";
 import { isTauri } from "./lib/api";
 
-export function toggleFullscreen() {
-  if (document.fullscreenElement) void document.exitFullscreen();
-  else void document.documentElement.requestFullscreen().catch(() => {});
+export async function toggleFullscreen() {
+  if (isTauri) {
+    try {
+      const { getCurrentWindow } = await import("@tauri-apps/api/window");
+      const w = getCurrentWindow();
+      const fs = !(await w.isFullscreen());
+      await w.setFullscreen(fs);
+      usePlayer.setState({ fullscreen: fs });
+      return;
+    } catch { /* fall through to DOM API */ }
+  }
+  if (document.fullscreenElement) {
+    void document.exitFullscreen().then(() => usePlayer.setState({ fullscreen: false }));
+  } else {
+    void document.documentElement.requestFullscreen()
+      .then(() => usePlayer.setState({ fullscreen: true }))
+      .catch(() => {});
+  }
 }
 
 /** VLC-style keyboard shortcuts. */
@@ -90,6 +105,7 @@ export function useKeyboard() {
           else if (s.showHelp) s.toggleHelp();
           else if (s.showUrlDialog) s.setUrlDialog(false);
           else if (s.showConvert) s.setConvertDialog(false);
+          else if (s.fullscreen) void toggleFullscreen();
           return;
       }
 

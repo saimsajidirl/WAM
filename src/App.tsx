@@ -22,6 +22,7 @@ export default function App() {
   const accent = usePlayer((s) => s.accent);
   const uiScale = usePlayer((s) => s.uiScale);
   const compact = usePlayer((s) => s.compact);
+  const fullscreen = usePlayer((s) => s.fullscreen);
   const current = usePlayer((s) => s.current);
   const prevSize = useRef<{ w: number; h: number } | null>(null);
 
@@ -37,6 +38,22 @@ export default function App() {
 
   useEffect(() => {
     void usePlayer.getState().init();
+  }, []);
+
+  // keep store.fullscreen in sync with the native window state
+  useEffect(() => {
+    if (!isTauri) return;
+    let un: (() => void) | undefined;
+    (async () => {
+      const { getCurrentWindow } = await import("@tauri-apps/api/window");
+      const w = getCurrentWindow();
+      un = await w.onResized(() => {
+        w.isFullscreen()
+          .then((fs) => usePlayer.setState({ fullscreen: fs }))
+          .catch(() => {});
+      });
+    })();
+    return () => un?.();
   }, []);
 
   // theme + accent + scale -> document
@@ -90,7 +107,7 @@ export default function App() {
   }, [compact]);
 
   return (
-    <div className={`app ${compact ? "compact" : ""}`} ref={rootRef}>
+    <div className={`app ${compact ? "compact" : ""} ${fullscreen ? "fs" : ""}`} ref={rootRef}>
       <TitleBar />
       <div className="main">
         <Stage />

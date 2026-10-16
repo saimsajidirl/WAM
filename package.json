@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "tauri": "tauri",
-    "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:dev": "set \"PATH=%USERPROFILE%\\.wam-tools\\mingw64\\bin;%PATH%\" && tauri dev",
+    "tauri:build": "set \"PATH=%USERPROFILE%\\.wam-tools\\mingw64\\bin;%PATH%\" && tauri build"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.5",

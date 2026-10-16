@@ -332,14 +332,9 @@ function ShuffleBtn() {
 }
 
 function FullscreenBtn() {
-  const [fs, setFs] = useState(!!document.fullscreenElement);
-  useEffect(() => {
-    const h = () => setFs(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", h);
-    return () => document.removeEventListener("fullscreenchange", h);
-  }, []);
+  const fs = usePlayer((s) => s.fullscreen);
   return (
-    <IconBtn title="Fullscreen (F)" onClick={toggleFullscreen}>
+    <IconBtn title="Fullscreen (F)" onClick={() => void toggleFullscreen()}>
       {fs ? <Minimize size={18} /> : <Maximize size={18} />}
     </IconBtn>
   );

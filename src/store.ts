@@ -96,6 +96,7 @@ interface PlayerStore {
   accent: string;
   uiScale: number;
   compact: boolean;
+  fullscreen: boolean;
   alwaysOnTop: boolean;
   showHelp: boolean;
   showUrlDialog: boolean;
@@ -268,6 +269,7 @@ export const usePlayer = create<PlayerStore>()((set, get) => ({
   accent: DEFAULT_SETTINGS.accent,
   uiScale: 1,
   compact: false,
+  fullscreen: false,
   alwaysOnTop: false,
   showHelp: false,
   showUrlDialog: false,

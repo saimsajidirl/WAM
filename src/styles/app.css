@@ -254,13 +254,6 @@
   z-index: 40;
   transition: transform 0.28s ease, opacity 0.28s ease;
 }
-.controls::before {
-  content: "";
-  position: absolute;
-  inset: -48px 0 100% 0;
-  background: linear-gradient(to top, var(--bg), transparent);
-  pointer-events: none;
-}
 .controls.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
 .controls.hide .seek-wrap { pointer-events: none; }
 
@@ -738,12 +731,20 @@
 /* ============================ compact ============================== */
 .app.compact .main { display: none; }
 .app.compact .controls { padding: 4px 12px 10px; }
-.app.compact .controls::before { display: none; }
 .app.compact .ctl-row { height: 100%; flex-direction: column; gap: 6px; }
 .app.compact .ctl-group.right { display: none; }
 .app.compact { background: var(--bg-2); }
 
 .stage.hidden { display: none; }
+
+/* ============================ fullscreen ============================= */
+.app.fs .titlebar { display: none; }
+.app.fs .controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 
 @media (max-width: 760px) {
   .ctl-group .ctl-btn:nth-of-type(n+6) { display: none; }
