@@ -15,7 +15,9 @@ concurrency:
 env:
   # Keep the target dir inside the workspace (overrides .cargo/config.toml's
   # D:\wam-target) so rust-cache can cache it and the runner needs no D: paths.
-  CARGO_TARGET_DIR: src-tauri/target
+  # Must be absolute — cargo runs from src-tauri/, so a relative path here
+  # would resolve to src-tauri/src-tauri/target.
+  CARGO_TARGET_DIR: ${{ github.workspace }}/src-tauri/target
 
 jobs:
   build-windows:
